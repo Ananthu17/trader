@@ -1,0 +1,23 @@
+{% load static %}
+<div class="left-side-menu-new">
+    <div class="containernew">
+        <img src="{% static 'images/logo_ekart.png'%}" alt="kart_logo" class="mb-4">
+    </div>
+    <div class="slimscroll-menu">
+        <!--- Sidemenu -->
+        <div id="sidebar-menu">
+            <ul class="metismenu" id="side-menu">
+                <li style="margin-top: 6.5rem!important;">
+                    <a href="{% url 'home' %}" class="sideactive">
+                        <div>
+                            <i class="mdi mdi-poll text-light"></i>
+                            <span class="text-light">Trades</span>
+                        </div>
+                        <i class="mdi  mdi mdi-circle-medium"></i>
+                    </a>
+                </li>
+                <!--  -->
+            </ul>
+        </div>
+    </div>
+</div>

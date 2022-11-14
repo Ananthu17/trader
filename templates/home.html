@@ -1,0 +1,173 @@
+{% extends "index.html" %}
+
+{% block title %} Trades{% endblock %}
+{% block content %}
+<div class="crct_center">
+    <div class="report_row">
+        <div class="card-box ">
+            <h4 class="header-title mt-0 mb-4">Total Revenue Today</h4>
+            <div class="widget-chart-1" style="display: flex;flex-direction: row;justify-content: space-between;">
+                <input data-plugin="knob" data-width="80" data-height="80" data-fgcolor="#f05050 " data-bgcolor="#F9B9B9" value="88" data-skin="tron" data-angleoffset="180" data-readonly="true" data-thickness=".15" readonly="readonly" style="width: 44px; height: 26px; position: absolute; vertical-align: middle; margin-top: 26px; margin-left: -62px; border: 0px; background: none; font: bold 16px Arial; text-align: center; color: rgb(240, 80, 80); padding: 0px; appearance: none;">
+                <div>
+                    <h2 class="font-weight-normal pt-2 mb-1"><span class="text-danger">₹</span> {{today_revenue.revenue__sum |floatformat:2}}</h2>
+                    <p class="mb-1 text-warning font-weight-bold">{{today_revenue.revenue__sum |floatformat:2}} / {{today.today_target}}</p>
+                    <p class="text-muted mb-1">Revenue today</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-box">
+            <h4 class="header-title mt-0 mb-3">Trades Analytics</h4>
+            <div class="widget-box-2">
+                <div class="widget-detail-2 text-right">
+                    <span class="badge badge-success badge-pill float-left mt-3">32% <i class="mdi mdi-trending-up"></i> </span>
+                    <h2 class="font-weight-normal mb-1">{{trades_today}}/{{today.trades_required}}</h2>
+                    <p class="text-muted mb-3">Trades today</p>
+                </div>
+                <div class="progress progress-bar-alt-success progress-sm">
+                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="77" aria-valuemin="0" aria-valuemax="100" style="width: 77%;">
+                        <span class="sr-only">77% Complete</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-box">
+            <h4 class="header-title mt-0 mb-4">Total Revenue</h4>
+            <div class="widget-chart-1" style="display: flex;flex-direction: row;justify-content: space-between;">
+                <input data-plugin="knob" data-width="80" data-height="80" data-fgcolor="#ffbd4a" data-bgcolor="#FFE6BA" value="80" data-skin="tron" data-angleoffset="180" data-readonly="true" data-thickness=".15" readonly="readonly" style="width: 44px; height: 26px; position: absolute; vertical-align: middle; margin-top: 26px; margin-left: -62px; border: 0px; background: none; font: bold 16px Arial; text-align: center; color: rgb(255, 189, 74); padding: 0px; appearance: none;">
+                <div>
+                    <h2 class="font-weight-normal pt-2 mb-1"><span class="text-warning">₹ </span>{{total_revenue.revenue__sum |floatformat:2}}</h2>
+                    <p class="text-muted mb-1">Revenue till date</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-box">
+            <h4 class="header-title mt-0 mb-3">Capital Analytics</h4>
+            <div class="widget-box-2">
+                <div class="widget-detail-2 text-right">
+                    <span class="badge badge-success badge-pill float-left mt-3">32% <i class="mdi mdi-trending-up"></i> </span>
+                    <h2 class="font-weight-normal mb-1">₹ {{today.capital}}</h2>
+                    <p class="text-muted mb-3">Per Trade Target <span class="text-danger font-weight-bold"> ₹ {{today.per_trade}}</span></p>
+                </div>
+                <div class="progress progress-bar-alt-success progress-sm">
+                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="77" aria-valuemin="0" aria-valuemax="100" style="width: 77%;">
+                        <span class="sr-only">77% Complete</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card mt-2 p-0">
+    <div class="card-header d-flex flex-row justify-content-between bg-white">
+        <h5 class="text-violet  font-weight-bold">TRADES TODAY</h5>
+        <!-- {% if messages %}
+            <h6 class="text-success" id="msg">Trade added...</h6>
+        {% else %}
+            <h6 class="text-danger">Error</h6>
+        {% endif %} -->
+        <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#exampleModal">
+            Automate <i class="fas fa-plus ml-1"></i>
+        </button>
+    </div>
+    <div class="card-body">
+        <table class="table" id="example">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Stock</th>
+                    <th>Buy</th>
+                    <th>Sale</th>
+                    <th>Quantity</th>
+                    <th>Revenue</th>
+                    <th>Status</th>
+                    <th>Day</th>
+                </tr>
+            </thead>
+            {% for item in trades%}
+                <tr>
+                    <td>{{item.id}}</td>
+                    <td>{{item.stock}}</td>
+                    <td>{{item.buy}}</td>
+                    <td>{{item.sale}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>₹ {{item.revenue}}</td>
+                    {% if item.get_status_display == "Profit" %}
+                        <td class="text-success font-weight-bold">{{item.get_status_display}}</td>
+                    {% else %}
+                        <td class="text-danger font-weight-bold">{{item.get_status_display}}</td>
+                    {% endif %}
+                    <td>{{item.day}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <!-- First row end  -->
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <form class="form" action="{% url 'home' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-header">
+            <h5 class="modal-title text-primary font-weight-bold" id="exampleModalLabel">START TRADE</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <label for="">Stock</label>
+                <select name="stock" id="" class="form-control mb-2">
+                    {% for item in stocks %}
+                        <option value="{{item.name}}">{{item.name}}</option>
+                    {% endfor %}
+                </select>
+                <label for="">Buy / Sell </label>
+                <select name="option" id="" class="form-control mb-2">
+                    <option value="buy">BUY</option>
+                    <option value="sell">SELL</option>
+                </select>
+                <label for="">Price</label>
+                <input type="number" step="0.01" name="price"  class="form-control mb-2" id="price">
+                <label for="">Units</label>
+                <input type="number" name="units"  class="form-control mb-2" id="units">
+                <label for="">Stop Loss</label>
+                <input type="number" name="stop_loss" value="0.25" class="form-control mb-2" id="loss">
+                <label for="">Target</label>
+                <input type="number" name="target" value="0.35" class="form-control" id="target">
+            </div>
+            <div class="modal-footer d-flex flex-column">
+                <div class="d-flex flex-row mb-2">
+                    <button id="amount" class="btn btn-warning btn-sm mr-2"></button>
+                    <button id="exmargin" class="btn btn-success btn-sm mr-2"></button>
+                    <button id="exloss" class="btn btn-danger btn-sm"></button>
+                </div>
+            <button type="submit" class="btn btn-primary btn-block btn-sm">START</button>
+            </div>
+        </form>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+
+{% if messages %}
+            <script>
+                document.addEventListener("DOMContentLoaded", function(event) {
+                toastr.options = { "closeButton": true, "debug": false, "newestOnTop": true,
+                    "progressBar": false, "positionClass": "toast-top-right", "preventDuplicates": true,
+                    "onclick": null, "showDuration": "300", "hideDuration": "1000", "timeOut": "5000",
+                    "extendedTimeOut": "1000", "showEasing": "swing", "hideEasing": "linear",
+                    "showMethod": "fadeIn", "hideMethod": "fadeOut" };
+                {% autoescape off %}
+                    {% for msg in messages %}
+                        toastr.{{ msg.level_tag }}("{{ msg }}");
+                    {% endfor %}
+                {% endautoescape %}
+            });
+            </script>
+        {% endif %}
+{% endblock %}
